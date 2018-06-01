@@ -1,5 +1,6 @@
 //express
 var express = require('express');
+var app = express();
 var router = express.Router();
 
 //mongodb
@@ -28,7 +29,7 @@ app.use(bodyParser.json());
 
 
 //new user save to database with hashed password
-app.post("/register-user", function(req, res){
+router.post("/register-user", function(req, res){
     let newUser = req.body;
 
     bcrypt.hash(newUser.userPsw, saltRounds, function(err, hash){

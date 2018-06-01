@@ -4,13 +4,18 @@
   "description": "a website by using nodejs and express",
   "main": "app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -e css,ejs,js,json --watch app"
+    "start": "nodemon -e css,js,json --watch app"
   },
   "author": "Lei X",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^2.0.1",
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "reload": "^2.2.2"
+    "fs": "0.0.1-security",
+    "mongodb": "^2.2.35",
+    "nodemailer": "^4.6.5",
+    "reload": "^2.2.2",
+    "socket.io": "^2.1.1"
   }
 }
