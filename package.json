@@ -1,0 +1,16 @@
+{
+  "name": "website_nodejs",
+  "version": "1.0.0",
+  "description": "a website by using nodejs and express",
+  "main": "app/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -e css,ejs,js,json --watch app"
+  },
+  "author": "Lei X",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "reload": "^2.2.2"
+  }
+}

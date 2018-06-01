@@ -1,0 +1,40 @@
+.my-flex-container
+{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+.introPix{
+    margin-bottom: 30px;
+    border-radius: 1800px;
+    box-shadow: 10px 10px 5px grey;
+}
+
+.img-rounded{
+    border-radius: 180px;
+}
+
+#signUpBtn, #logInBtn {
+    background-color: gray;
+    color: white;
+    border-color: gray;
+    width: 250px;
+}
+
+#buttonDiv button:hover{
+    background-color: rgb(175, 174, 174);
+    border-color: rgb(175, 174, 174);
+}
+
+#buttonDiv {
+    text-align: center;
+    margin-top: 40px;
+}
+
+#logInBtn {
+    margin-right: 80px;
+}
+
