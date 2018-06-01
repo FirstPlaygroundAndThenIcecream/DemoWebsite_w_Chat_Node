@@ -1,0 +1,48 @@
+
+h1 {
+    text-align: center;
+}
+
+.row {
+    margin-top: 25px;
+    width: 100%;
+}
+
+#chatInput {
+    text-align: center;
+}
+
+#btnSend {
+    background-color: gray;
+    color: white;
+}
+
+#chatroom {
+    padding: 10px;
+    background-color: white;
+    margin: auto;
+    border-style: solid;
+    height: 350px;
+    width: 738px;
+    overflow: auto;
+}
+
+#updateBtn, #deleteChatBtn {
+    background-color: gray;
+    color: white;
+    border-color: gray;
+}
+
+#btnDiv button:hover{
+    background-color: rgb(175, 174, 174);
+    border-color: rgb(175, 174, 174);
+}
+
+#paraUserName {
+    font-size: 25px;
+    color: white;
+}
+
+#deleteChatDiv {
+    margin-top: 0;
+}
