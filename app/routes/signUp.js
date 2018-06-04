@@ -3,9 +3,19 @@ var express = require('express');
 var app = express();
 var router = express.Router();
 
+
 //mongodb
 const mongo = require("mongodb").MongoClient;
 const path = "mongodb://localhost:27017/node1";
+
+let collection;
+mongo.connect(path, function(err, db){
+    if(err){
+        console.log("db connect err", err)
+    }
+    collection = db.collection("zooMembers");
+
+});
 
 //bcrypt
 const bcrypt = require("bcrypt");
@@ -27,55 +37,60 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//function
+var encryptUser = require("./bcryptfunction");
+
 
 //new user save to database with hashed password
 router.post("/register-user", function(req, res){
     let newUser = req.body;
 
-    bcrypt.hash(newUser.userPsw, saltRounds, function(err, hash){
-        let userHashed = {
-            userName: newUser.userName,
-            userPsw: hash,
-            userEmail: newUser.userEmail
-        }
-        console.log(userHashed);
+    // bcrypt.hash(newUser.userPsw, saltRounds, function(err, hash){
+    //     let userHashed = {
+    //         userName: newUser.userName,
+    //         userPsw: hash,
+    //         userEmail: newUser.userEmail
+    //     }
+    //     console.log(userHashed);
+    var hasedPsw = encryptUser.encryptUser(newUser.userPsw);
 
+    
+    hasedPsw.then((hasedResult)=>{
+        console.log(hasedResult);
+        newUser.userPsw = hasedResult;
+    
         let mailOptions = {
             from: 'forTTTTestOnly@mail.com',
-            to: userHashed.userEmail,
+            to: newUser.userEmail,
             subject: 'Thanks for using the blablabla chat!',
-            text: 'Dear ' + userHashed.userName + ', thanks for choose using blabla chat, enjoy!',
+            text: 'Dear ' + newUser.userName + ', thanks for choose using blabla chat, enjoy!',
         };
 
-        mongo.connect(path, function(err, db){
-            if(err){
-                console.log("db connect err", err)
-            }
-       
-            let collection = db.collection("zooMembers");            
-            collection.insert(userHashed, function(err, success){
+                    
+            collection.insert(newUser, function(err, success){
                 if(err){
                     console.log("db create user error: ", err);
                 }
                 else{
                     transporter.sendMail(mailOptions, (err, info) => {
-                        if(err){
-                            console.log(err);
-                        }
+                        if(err) console.log(err);
                         else{
                             console.log("welcome email is sent");
                         }
                     });
-                    console.log(userHashed.userName + " is added to database");
+                    console.log(newUser.userName + " is added to database");
                 }
             });
-            db.close();
-        });
     
         let response = {"status": 200};
  
         res.json(response);
+    }).catch((err) => {
+        console.log("promise err");
     });
+
+    
+    // });
 });
 
 module.exports = router;

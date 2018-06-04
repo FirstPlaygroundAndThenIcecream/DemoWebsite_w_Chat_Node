@@ -5,9 +5,13 @@ var app = express();
 const mongo = require("mongodb").MongoClient;
 const path = "mongodb://localhost:27017/node1";
 
+//promise
+const promise = require('promise');
+
 //bcrypt
 const bcrypt = require("bcrypt");
 const saltRounds = 8;
+var encryptUser = require("./routes/bcryptfunction");
 
 //emailer
 const nodemailer = require("nodemailer");
@@ -17,13 +21,7 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//socket.io
-// const server = require("http").Server(app);
-// const io = require("socket.io")(server);
-
-// //files
-// var fs = require('fs');
-
+//get collections from db
 let collection_user, collection_chat;
 mongo.connect(path, function(err, db){
     if(err) throw err;
@@ -33,6 +31,7 @@ mongo.connect(path, function(err, db){
 
 app.use(express.static(__dirname + "/public"));
 
+//some routes
 app.use(require('./routes/index'));
 app.use(require('./routes/contact'));
 app.use(require('./routes/logIn-signUp'));
@@ -53,22 +52,28 @@ app.post("/verify-user", function(req, res){
             let response = {"status": 404};
             res.json(response);
         }else{
-            bcrypt.compare(userInfo.userPsw, result.userPsw, function(error, result){
-                if(error){
-                    console.log("db compare hash err", error)
-                } 
-                else{
-                    if(result == true){
-                        console.log("right password");
-                        let response = {"status": 200};
-                        profileName = userInfo.userName;
-                        res.json(response);
-                    }else{
-                        let response = {"status": 404};
-                        res.json(response);
-                        console.log("wrong password");
-                    }
+            var compareResult = encryptUser.comparePsw(userInfo.userPsw, result.userPsw);
+
+            let userPswCompared;
+
+            compareResult.then((comparePsw_result) => 
+            {
+                userPswCompared = comparePsw_result;
+                
+                console.log("comparePsw: " + userPswCompared);
+                
+                if(userPswCompared == true){
+                    console.log("right password");
+                    let response = {"status": 200};
+                    profileName = userInfo.userName;
+                    res.json(response);
+                }else{
+                    let response = {"status": 404};
+                    res.json(response);
+                    console.log("wrong password");
                 }
+            }).catch((err) => {
+                console.log("promise err");
             });
         }
     });  
@@ -76,27 +81,25 @@ app.post("/verify-user", function(req, res){
 
 app.post("/update-user", function(req, res) {
     let updatedUserInfo = req.body;
-    bcrypt.hash(updatedUserInfo.userPsw, saltRounds, function(err, hash){
-        let userHashed = {
-            userName: updatedUserInfo.userName,
-            userPsw: hash
-        }
-        console.log(userHashed);
+    console.log(updatedUserInfo);
+    updatedUserInfo.userPsw = encryptUser.encryptUser(updatedUserInfo.userPsw);
+    
+    console.log(updatedUserInfo);
 
-        collection_user.update(
-            {"userName": profileName}, 
-            {
-                $set: {
-                    "userName": userHashed.userName,
-                    "userPsw" : userHashed.userPsw,
-                }
+    collection_user.update(
+        {"userName": profileName}, 
+        {
+            $set: {
+                "userName": updatedUserInfo.userName,
+                "userPsw" : updatedUserInfo.userPsw,
             }
-        );
-        profileName = userHashed.userName;
-        
-        let response = {"status": 200};
-        res.json(response);
-    });
+        }
+    );
+    profileName = updatedUserInfo.userName;
+    
+    let response = {"status": 200};
+    res.json(response);
+
 });
 
 app.get("/get-username", function(req, res) {
@@ -171,12 +174,3 @@ server.listen(4000, function() {
 });
 
 
-var hashUserInfo = function(userInfo){
-    bcrypt.hash(userInfo.userPsw, saltRounds, function(err, hash){
-        let userHashed = {
-            userName: updatedUserInfo.userName,
-            userPsw: hash
-        }
-    });
-    return userHashed;
-}
