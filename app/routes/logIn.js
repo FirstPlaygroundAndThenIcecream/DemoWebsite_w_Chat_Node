@@ -68,7 +68,4 @@ router.post("/verify-user", function(req, res){
     });    
 });
 
-module.exports = router;
-module.exports.validateUsername = {
-    validateUsername: profileName
-};
+module.exports.router = router;

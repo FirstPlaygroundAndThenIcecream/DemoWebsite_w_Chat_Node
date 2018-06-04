@@ -1,4 +1,4 @@
-var socket = io.connect("http://localhost:3000");
+var socket = io.connect("http://localhost:4000");
 
 $(document).ready(function(){
 
@@ -12,9 +12,8 @@ $(document).ready(function(){
     socket.on("all chat history", function(data) {
         console.log(data.result);
         for(var i = 0; i < data.result.length; i++) {
-            $("#chatroom").append("<p class='message'>" + data.result[i].username + ": " + data.result[i].message + "</p>");
+            $("#chatroom").append("<p class='message'><strong>" + data.result[i].username + ":</strong> " + data.result[i].message + "</p>");
         }
-        
     });
 });
             
@@ -32,9 +31,8 @@ $("#btnSend").click(function() {
     $("inputMessage").focus();
 });
 
-
 socket.on("new message", function(data) {
-    $("#chatroom").append("<p class='message'>" + data.username + ": " + data.message + "</p>");
+    $("#chatroom").append("<p class='message'><strong>" + data.username + ":</strong> " + data.message + "</p>");
     var d = $('#chatroom');
     d.scrollTop(d.prop("scrollHeight"));
 });
@@ -50,4 +48,8 @@ $("#deleteChatBtn").click(function(){
     }).done(function(res){
         $("#chatroom").empty();
     });
+});
+
+$("#logoutBtn").click(function() {
+    window.location.assign("../logIn-signUp.html");
 });

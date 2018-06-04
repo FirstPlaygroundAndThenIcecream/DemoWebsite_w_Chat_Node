@@ -14,15 +14,19 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <a class="navbar-brand" href="http://localhost:3000/">Zoo</a>
+                <a class="navbar-brand" href="http://localhost:4000/">Zoo</a>
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="http://localhost:3000/contact">Contact <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="http://localhost:4000/contact">Contact <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="http://localhost:3000/logIn-register">Log in</a>
+                    <a class="nav-link" href="http://localhost:4000/logIn-signUp">Log in</a>
                 </li>
                 </ul>       
+            </div>
+            <div id="btnDiv">
+                <button type="button" class="btn btn-primary" id="updateBtn">Update info</button>
+                <button type="button" class="btn btn-primary" id="logoutBtn">Logout</button>
             </div>
         </nav>
     </div>
@@ -51,28 +55,21 @@
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" id="btnSend" type="button">Send</button>
                     </div>
-                </div> 
+                </div>
+                <!-- <button id="deleteChatBtn" type="button">Delete all chat history</button> -->
             </div>
-            <div class="col-3"></div>
-        </div>
-
-        <div class="row">
-            <div class="col-3"></div>
-                <p>Delete all chat history</p>
             <div class="col-3"></div>
         </div>
 
         <div class="row" id="deleteChatDiv">
             <div class="col-3"></div>
-                <button class="btn btn-outline-secondary" id="deleteChatBtn" type="button">Delete</button>
+                <button class="btn btn-outline-secondary" id="deleteChatBtn" type="button">Delete all chat history</button>
             <div class="col-3"></div>
         </div>
-
     
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-        <script src="../client-js/chatroom.js"></script>
+        <script src="./client-js/chatroom.js"></script>
 </body>
 </html>

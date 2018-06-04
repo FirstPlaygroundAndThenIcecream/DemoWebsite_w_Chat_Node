@@ -62,7 +62,7 @@ $("#logInBtn").click(function(event){
         }).done(function(res){
             if(res.status == 200){
                 console.log(res.status);
-                window.location.assign("../html/chatroom.html");
+                window.location.assign("./chatroom.html");
                 $("#userName").val("");
                 $("#userPsw").val("");
     
