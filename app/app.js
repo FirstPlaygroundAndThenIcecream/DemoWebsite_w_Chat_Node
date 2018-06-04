@@ -24,6 +24,12 @@ app.use(bodyParser.json());
 // //files
 // var fs = require('fs');
 
+let collection_user, collection_chat;
+mongo.connect(path, function(err, db){
+    if(err) throw err;
+    collection_user = db.collection("zooMembers");
+    collection_chat = db.collection("chat_history");
+});
 
 app.use(express.static(__dirname + "/public"));
 
@@ -37,43 +43,35 @@ app.use(require('./routes/signUp'));
 let profileName = "Anonymous";
 app.post("/verify-user", function(req, res){
     let userInfo = req.body;
-    mongo.connect(path, function(err, db){
+
+    collection_user.findOne({"userName": userInfo.userName}, function(err, result){
         if(err){
-            console.log("db connect err", err);
+            console.log("db find user error: ", err);
         }
-
-        let collection = db.collection("zooMembers");
-
-        collection.findOne({"userName": userInfo.userName}, function(err, result){
-            if(err){
-                console.log("db find user error: ", err);
-            }
-            else if(result == null){
-                console.log("can not find user");
-                let response = {"status": 404};
-                res.json(response);
-            }else{
-                bcrypt.compare(userInfo.userPsw, result.userPsw, function(error, result){
-                    if(error){
-                        console.log("db compare hash err", error)
-                    } 
-                    else{
-                        if(result == true){
-                            console.log("right password");
-                            let response = {"status": 200};
-                            profileName = userInfo.userName;
-                            res.json(response);
-                        }else{
-                            let response = {"status": 404};
-                            res.json(response);
-                            console.log("wrong password");
-                        }
+        else if(result == null){
+            console.log("can not find user");
+            let response = {"status": 404};
+            res.json(response);
+        }else{
+            bcrypt.compare(userInfo.userPsw, result.userPsw, function(error, result){
+                if(error){
+                    console.log("db compare hash err", error)
+                } 
+                else{
+                    if(result == true){
+                        console.log("right password");
+                        let response = {"status": 200};
+                        profileName = userInfo.userName;
+                        res.json(response);
+                    }else{
+                        let response = {"status": 404};
+                        res.json(response);
+                        console.log("wrong password");
                     }
-                });
-            }
-        });
-        db.close();
-    });    
+                }
+            });
+        }
+    });  
 });
 
 app.post("/update-user", function(req, res) {
@@ -85,24 +83,16 @@ app.post("/update-user", function(req, res) {
         }
         console.log(userHashed);
 
-        mongo.connect(path, function(err, db) {
-            if(err) {
-                console.log("db connect error:", err);
-            }
-            let collection = db.collection("zooMembers");
-
-            collection.update(
-                {"userName": profileName}, 
-                {
-                    $set: {
-                        "userName": userHashed.userName,
-                        "userPsw" : userHashed.userPsw,
-                    }
+        collection_user.update(
+            {"userName": profileName}, 
+            {
+                $set: {
+                    "userName": userHashed.userName,
+                    "userPsw" : userHashed.userPsw,
                 }
-            );
-            db.close();
-            profileName = userHashed.userName;
-        })
+            }
+        );
+        profileName = userHashed.userName;
         
         let response = {"status": 200};
         res.json(response);
@@ -115,41 +105,25 @@ app.get("/get-username", function(req, res) {
 
 app.delete("/delete-user", function(req, res) {
     var user = req.body;
-    mongo.connect(path, function(err, db){
+    collection_user.deleteOne(user, function(err, result){
         if(err){
-            console.log("db connect err", err)
+            console.log(err);
         }
-   
-        let collection = db.collection("zooMembers");          
-        collection.deleteOne(user, function(err, result){
-            if(err){
-                console.log(err);
-            }
-            else{
-                console.log("1 record deleted");
-            }
-        });
-        db.close();
+        else{
+            console.log("1 record deleted");
+        }
     });
     let response = {"status": 200};
     res.json(response);
 });
 
 app.delete("/delete-chat", function(req, res){
-    mongo.connect(path, function(err, db){
-        if(err){
-            console.log("db connect err", err)
+    collection_chat.deleteMany({}, function(err, result) {
+        if(err) {
+            console.log(err);
+        }else{
+            console.log("chat history deleted");
         }
-
-        let collection = db.collection("chat_history");
-        collection.deleteMany({}, function(err, result) {
-            if(err) {
-                console.log(err);
-            }else{
-                console.log("chat history deleted");
-            }
-        });
-        db.close();
     });
     let response = {"status": 200};
     res.json(response);
@@ -164,15 +138,8 @@ io.on("connection", function(socket) {
     socket.username = profileName;
 
     socket.on("chat message", function(data) {
-        let messageData = {"message": data.message, "username": socket.username};
-        
-        mongo.connect(path, function(err, db){
-            if(err){
-                console.log("db connect err", err)
-            }
-       
-            let collection = db.collection("chat_history");            
-            collection.insert(messageData, function(err, success){
+        let messageData = {"message": data.message, "username": socket.username};          
+            collection_chat.insert(messageData, function(err, success){
                 if(err){
                     console.log(err);
                 }
@@ -180,8 +147,6 @@ io.on("connection", function(socket) {
                     console.log(messageData.message + " is added to database");
                 }
             });
-            db.close();
-        });
 
         console.log("The client wrote: ", messageData.message);
 
@@ -189,23 +154,15 @@ io.on("connection", function(socket) {
     });
 
     socket.on("chat history", function() {
-        mongo.connect(path, function(err, db){
+       
+        collection_chat.find({}, {_id: 0, message: 1, username: 1}).toArray(function(err, result){
             if(err){
-                console.log("db connect err", err);
+                console.log(err);
+            }else{
+                console.log(result);
+                socket.emit("all chat history", {"result": result});
             }
-    
-            let collection = db.collection("chat_history");
-    
-            collection.find({}, {_id: 0, message: 1, username: 1}).toArray(function(err, result){
-                if(err){
-                    console.log(err);
-                }else{
-                    console.log(result);
-                    socket.emit("all chat history", {"result": result});
-                }
-            });
-            db.close();
-        });            
+        });
     });
 });
 
@@ -213,3 +170,13 @@ server.listen(4000, function() {
     console.log("Server is listening on port 4000");
 });
 
+
+var hashUserInfo = function(userInfo){
+    bcrypt.hash(userInfo.userPsw, saltRounds, function(err, hash){
+        let userHashed = {
+            userName: updatedUserInfo.userName,
+            userPsw: hash
+        }
+    });
+    return userHashed;
+}
