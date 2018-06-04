@@ -36,7 +36,7 @@ router.post("/verify-user", function(req, res){
             console.log("db connect err", err);
         }
 
-        let collection = db.collection("mandatoryII");
+        let collection = db.collection("zooMembers");
 
         collection.findOne({"userName": userInfo.userName}, function(err, result){
             if(err){
@@ -58,6 +58,8 @@ router.post("/verify-user", function(req, res){
                             profileName = userInfo.userName;
                             res.json(response);
                         }else{
+                            let response = {"status": 404};
+                            res.json(response);
                             console.log("wrong password");
                         }
                     }

@@ -28,7 +28,7 @@ $("#signUpBtn").click(function(event){
                     alert("You are now registered, please log in to use our service");
                 }, 300);
             } else if(res.status == 404){
-                $("#alertMe").text("User not exist");
+                console.log("can't allow to sign up");
             }
         });    
     }else if(userName == ""){

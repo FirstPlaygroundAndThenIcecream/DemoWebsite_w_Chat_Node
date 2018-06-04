@@ -52,7 +52,7 @@ router.post("/register-user", function(req, res){
                 console.log("db connect err", err)
             }
        
-            let collection = db.collection("mandatoryII");            
+            let collection = db.collection("zooMembers");            
             collection.insert(userHashed, function(err, success){
                 if(err){
                     console.log("db create user error: ", err);

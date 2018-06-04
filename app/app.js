@@ -42,7 +42,7 @@ app.post("/verify-user", function(req, res){
             console.log("db connect err", err);
         }
 
-        let collection = db.collection("mandatoryII");
+        let collection = db.collection("zooMembers");
 
         collection.findOne({"userName": userInfo.userName}, function(err, result){
             if(err){
@@ -89,7 +89,7 @@ app.post("/update-user", function(req, res) {
             if(err) {
                 console.log("db connect error:", err);
             }
-            let collection = db.collection("mandatoryII");
+            let collection = db.collection("zooMembers");
 
             collection.update(
                 {"userName": profileName}, 
@@ -120,7 +120,7 @@ app.delete("/delete-user", function(req, res) {
             console.log("db connect err", err)
         }
    
-        let collection = db.collection("mandatoryII");          
+        let collection = db.collection("zooMembers");          
         collection.deleteOne(user, function(err, result){
             if(err){
                 console.log(err);
