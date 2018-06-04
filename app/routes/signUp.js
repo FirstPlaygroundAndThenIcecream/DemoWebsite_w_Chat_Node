@@ -73,7 +73,7 @@ router.post("/register-user", function(req, res){
         });
     
         let response = {"status": 200};
-    
+ 
         res.json(response);
     });
 });

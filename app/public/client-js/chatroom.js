@@ -3,7 +3,7 @@ var socket = io.connect("http://localhost:4000");
 $(document).ready(function(){
 
     $.get("/get-username", function(data) {
-        $("#paraUserName").text(data.userName);
+        $("#paraUserName").text("Hello, " + data.userName);
     });  
 
     socket.emit("chat history", function(data){    

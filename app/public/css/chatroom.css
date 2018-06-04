@@ -27,7 +27,7 @@ h1 {
     overflow: auto;
 }
 
-#updateBtn, #deleteChatBtn {
+#updateBtn, #logoutBtn{
     background-color: gray;
     color: white;
     border-color: gray;

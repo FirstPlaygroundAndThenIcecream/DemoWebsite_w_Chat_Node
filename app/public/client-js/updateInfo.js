@@ -56,6 +56,15 @@ $("#deleteUserInfoBtn").click(function() {
     });
 });
 
+$("#deleteChatBtn").click(function(){
+    $.ajax({
+        type: "delete",
+        url: "delete-chat"
+    }).done(function(res){
+        $("#chatroom").empty();
+    });
+});
+
 $("#logoutBtn").click(function() {
     window.location.assign("../logIn-signUp.html");
 });

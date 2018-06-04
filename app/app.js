@@ -64,6 +64,8 @@ app.post("/verify-user", function(req, res){
                             profileName = userInfo.userName;
                             res.json(response);
                         }else{
+                            let response = {"status": 404};
+                            res.json(response);
                             console.log("wrong password");
                         }
                     }

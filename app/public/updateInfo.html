@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update info</title>
+    <title>**Update profile**</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/chatroom.css">
@@ -24,9 +24,13 @@
                 </li>
                 </ul>       
             </div>
+            <nav class="navbar navbar-dark bg-dark">
+                <span class="navbar-text" id="paraUserName">
+                </span>
+            </nav>
             <div id="btnDiv">
                 <button type="button" class="btn btn-primary" id="updateBtn">Update my profile</button>
-                <button type="button" class="btn btn-primary" id="logoutBtn">Logout</button>
+                <button type="button" class="btn btn-primary" id="logoutBtn">Log out</button>
             </div>
         </nav>
     </div>
@@ -40,9 +44,10 @@
     </div>
 
     <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
-
+        <div class="col-3">
+            <img src="https://www.nationalgeographic.com/content/dam/animals/thumbs/rights-exempt/mammals/m/meerkat_thumb.ngsversion.1484886604355.adapt.1900.1.jpg" alt="..." class="img-thumbnail">
+        </div>
+        <div class="col-6">         
         <form>
             <div class="form-group">
                 <input type="text" class="form-control" id="userName" placeholder="Username" autocomplete="off" required>
@@ -56,6 +61,7 @@
                 <button type="button" class="btn btn-secondary" id="updateInfoBtn">Update</button>
                 <button type="button" class="btn btn-secondary" id="backBtn">Go back</button>
                 <button type="button" class="btn btn-secondary" id="deleteInfoBtn">Delete account</button>
+                <button type="button" class="btn btn-secondary" id="deleteChatBtn" type="button">Delete all chat history</button>
             </div>
         </form>
         <div class="col-3"></div>

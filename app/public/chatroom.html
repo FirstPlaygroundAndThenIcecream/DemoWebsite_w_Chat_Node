@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chatroom</title>
+    <title>**Chatroom**</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/chatroom.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 </head>
-<body>
+<body background="https://www.oceanrisksummit.com/Content/images/ocean-poster.png">
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,14 +25,18 @@
                 </li>
                 </ul>       
             </div>
+            <nav class="navbar navbar-dark bg-dark">
+                <span class="navbar-text" id="paraUserName">
+                </span>
+            </nav>
             <div id="btnDiv">
-                <button type="button" class="btn btn-primary" id="updateBtn">Update info</button>
-                <button type="button" class="btn btn-primary" id="logoutBtn">Logout</button>
+                <button type="button" class="btn btn-primary" id="updateBtn">Update my profile</button>
+                <button type="button" class="btn btn-primary" id="logoutBtn">Log out</button>
             </div>
         </nav>
     </div>
-        
-        <div class="row">
+    
+        <div class="row" >
             <div class="col-3"></div>
             <div class="col-6">
                 <h1>Share our love to those cutties!</h1>
@@ -56,16 +61,15 @@
                         <button class="btn btn-outline-secondary" id="btnSend" type="button">Send</button>
                     </div>
                 </div>
-                <!-- <button id="deleteChatBtn" type="button">Delete all chat history</button> -->
             </div>
             <div class="col-3"></div>
         </div>
 
-        <div class="row" id="deleteChatDiv">
+        <!-- <div class="row" id="deleteChatDiv">
             <div class="col-3"></div>
                 <button class="btn btn-outline-secondary" id="deleteChatBtn" type="button">Delete all chat history</button>
             <div class="col-3"></div>
-        </div>
+        </div> -->
     
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
