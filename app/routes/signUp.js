@@ -44,21 +44,23 @@ var encryptUser = require("./bcryptfunction");
 //new user save to database with hashed password
 router.post("/register-user", function(req, res){
     let newUser = req.body;
+    console.log(newUser);
 
-    // bcrypt.hash(newUser.userPsw, saltRounds, function(err, hash){
-    //     let userHashed = {
-    //         userName: newUser.userName,
-    //         userPsw: hash,
-    //         userEmail: newUser.userEmail
-    //     }
-    //     console.log(userHashed);
     var hasedPsw = encryptUser.encryptUser(newUser.userPsw);
-
     
     hasedPsw.then((hasedResult)=>{
         console.log(hasedResult);
-        newUser.userPsw = hasedResult;
-    
+        newUser.userPsw = hasedResult;   
+       
+        collection.insert(newUser, function(err, success){
+            if(err){
+                console.log("db create user error: ", err);
+            }
+            else{
+                console.log(newUser.userName + " is added to database");
+            }
+        });
+
         let mailOptions = {
             from: 'forTTTTestOnly@mail.com',
             to: newUser.userEmail,
@@ -66,31 +68,22 @@ router.post("/register-user", function(req, res){
             text: 'Dear ' + newUser.userName + ', thanks for choose using blabla chat, enjoy!',
         };
 
-                    
-            collection.insert(newUser, function(err, success){
-                if(err){
-                    console.log("db create user error: ", err);
-                }
-                else{
-                    transporter.sendMail(mailOptions, (err, info) => {
-                        if(err) console.log(err);
-                        else{
-                            console.log("welcome email is sent");
-                        }
-                    });
-                    console.log(newUser.userName + " is added to database");
-                }
-            });
+        console.log(newUser.userEmail);
+        
+        transporter.sendMail(mailOptions, (err, info) => {
+            console.log("mail info: " + info);
+            if(err) console.log(err);
+            else{
+                console.log("welcome email is sent");
+            }
+        });
     
         let response = {"status": 200};
- 
         res.json(response);
+
     }).catch((err) => {
         console.log("promise err");
     });
-
-    
-    // });
 });
 
 module.exports = router;
