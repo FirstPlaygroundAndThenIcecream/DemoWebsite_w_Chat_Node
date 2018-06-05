@@ -48,7 +48,7 @@ router.post("/register-user", function(req, res){
 
     var hasedPsw = encryptUser.encryptUser(newUser.userPsw);
     
-    hasedPsw.then((hasedResult)=>{
+    hasedPsw.then((hasedResult) => {
         console.log(hasedResult);
         newUser.userPsw = hasedResult;   
        

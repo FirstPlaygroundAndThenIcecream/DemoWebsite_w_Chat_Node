@@ -58,8 +58,7 @@ app.post("/verify-user", function(req, res){
 
             compareResult.then((comparePsw_result) => 
             {
-                userPswCompared = comparePsw_result;
-                
+                userPswCompared = comparePsw_result;                
                 console.log("comparePsw: " + userPswCompared);
                 
                 if(userPswCompared == true){
@@ -99,7 +98,6 @@ app.post("/update-user", function(req, res) {
     
     let response = {"status": 200};
     res.json(response);
-
 });
 
 app.get("/get-username", function(req, res) {
@@ -109,9 +107,7 @@ app.get("/get-username", function(req, res) {
 app.delete("/delete-user", function(req, res) {
     var user = req.body;
     collection_user.deleteOne(user, function(err, result){
-        if(err){
-            console.log(err);
-        }
+        if(err) console.log(err);
         else{
             console.log("1 record deleted");
         }
@@ -122,9 +118,8 @@ app.delete("/delete-user", function(req, res) {
 
 app.delete("/delete-chat", function(req, res){
     collection_chat.deleteMany({}, function(err, result) {
-        if(err) {
-            console.log(err);
-        }else{
+        if(err) console.log(err);
+        else{
             console.log("chat history deleted");
         }
     });
@@ -143,27 +138,21 @@ io.on("connection", function(socket) {
     socket.on("chat message", function(data) {
         let messageData = {"message": data.message, "username": socket.username};          
             collection_chat.insert(messageData, function(err, success){
-                if(err){
-                    console.log(err);
-                }
+                if(err) console.log(err);
                 else{
                     console.log(messageData.message + " is added to database");
                 }
             });
 
-        console.log("The client wrote: ", messageData.message);
-
         io.emit("new message", {"message": messageData.message, "username" : messageData.username});          
     });
 
-    socket.on("chat history", function() {
-       
+    socket.on("chat history", function() {      
         collection_chat.find({}, {_id: 0, message: 1, username: 1}).toArray(function(err, result){
-            if(err){
-                console.log(err);
-            }else{
-                console.log(result);
-                socket.emit("all chat history", {"result": result});
+            if(err) console.log(err);
+            else{
+            console.log(result);
+            socket.emit("all chat history", {"result": result});
             }
         });
     });
